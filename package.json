@@ -1,6 +1,6 @@
 {
-  "name": "dockerode-promise",
-  "version": "0.1.0",
+  "name": "dockerode-promise-es6",
+  "version": "1.0.0",
   "description": "Dockerode wrapped in promises",
   "main": "index.js",
   "scripts": {
@@ -20,13 +20,10 @@
     "url": "https://github.com/lightsofapollo/dockerode-promise/issues"
   },
   "peerDependencies": {
-    "dockerode": ">= 2.1.4"
+    "dockerode": ">= 2.2.9"
   },
   "devDependencies": {
-    "dockerode": "^2.1.4",
+    "dockerode": "^2.2.9",
     "mocha": "^2.2.5"
-  },
-  "dependencies": {
-    "promise": "^7.0.1"
   }
 }

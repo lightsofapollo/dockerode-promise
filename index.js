@@ -1,10 +1,18 @@
-var Promise = require('promise'),
-    Docker = require('dockerode');
+const Docker = require('dockerode');
 
 var wrappedProto = Docker.prototype;
 
+function denodeify(func) {
+  return function(...args) {
+    return new Promise((resolve, reject) => {
+      let input = [...args, (err, val) => err ? reject(err) : resolve(val)];
+      func.apply(this, input);
+    });
+  }
+}
+
 function proxyPromise (method) {
-  var promisey = Promise.denodeify(method);
+  var promisey = denodeify(method);
   return function() {
     return promisey.apply(this.$subject, arguments);
   };
@@ -41,7 +49,7 @@ function DockerProxy(options) {
 
 promiseObj(DockerProxy.prototype, wrappedProto);
 
-// sadly we need to wrap run directly as a promise to consolidate both 
+// sadly we need to wrap run directly as a promise to consolidate both
 // of the resulting arguments.
 DockerProxy.prototype.run = function(image, command, stream) {
   var subject = this.$subject;
@@ -53,17 +61,6 @@ DockerProxy.prototype.run = function(image, command, stream) {
           // re-wrap
           container: ContainerProxy(container)
         });
-     });
-  });
-};
-
-// We also have wrap createContainer manually as it returns
-DockerProxy.prototype.createContainer = function(opts) {
-  var subject = this.$subject;
-  return new Promise(function(accept, reject) {
-     subject.createContainer(opts, function(err, container) {
-        if (err) return reject(err);
-        accept(ContainerProxy(container));
      });
   });
 };

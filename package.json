@@ -4,7 +4,7 @@
   "description": "Dockerode wrapped in promises",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --ui tdd --timeout 240s --reporter spec test.js"
+    "test": "mocha --harmony_rest_parameters --ui tdd --timeout 240s --reporter spec test.js"
   },
   "repository": {
     "type": "git",

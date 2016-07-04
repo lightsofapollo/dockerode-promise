@@ -65,6 +65,17 @@ DockerProxy.prototype.run = function(image, command, stream) {
   });
 };
 
+// We also have wrap createContainer manually as it returns
+DockerProxy.prototype.createContainer = function(opts) {
+  var subject = this.$subject;
+  return new Promise(function(accept, reject) {
+    subject.createContainer(opts, function(err, container) {
+      if (err) return reject(err);
+      accept(ContainerProxy(container));
+    });
+  });
+};
+
 DockerProxy.prototype.getImage = function (id) {
   return PromiseProxy(this.$subject.getImage(id));
 };

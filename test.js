@@ -12,8 +12,9 @@ suite("dockerode-promise", function() {
 
   test("docker.createVolume", function() {
     return docker.createVolume({
+      Name: 'dockerode-promise-test',
     }).then(function(volume) {
-      assert(volume.name);
+      assert.equal(volume.name, 'dockerode-promise-test');
     });
   });
 

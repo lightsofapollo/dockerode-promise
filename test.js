@@ -10,6 +10,13 @@ suite("dockerode-promise", function() {
     return docker.info();
   });
 
+  test("docker.createVolume", function() {
+    return docker.createVolume({
+    }).then(function(volume) {
+      assert(volume.name);
+    });
+  });
+
   test("docker.createContainer", function() {
     return docker.createContainer({
       Image: 'busybox',

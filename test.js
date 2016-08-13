@@ -10,6 +10,24 @@ suite("dockerode-promise", function() {
     return docker.info();
   });
 
+  test("docker.createVolume", function() {
+    return docker.createVolume({
+      Name: 'dockerode-promise-test',
+    }).then(function(volume) {
+      assert.equal(volume.name, 'dockerode-promise-test');
+    });
+  });
+
+  test("docker.getVolume", function() {
+    const volumeRef = docker.getVolume('dockerode-promise-test')
+    return volumeRef.inspect().then(function (volume) {
+      assert.equal(volume.Name, 'dockerode-promise-test');
+      assert.equal(volume.Driver, 'local');
+      assert.equal(volume.Mountpoint, '/var/lib/docker/volumes/dockerode-promise-test/_data');
+      assert.equal(volume.Label, null);
+    });
+  });
+
   test("docker.createContainer", function() {
     return docker.createContainer({
       Image: 'busybox',

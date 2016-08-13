@@ -84,4 +84,8 @@ DockerProxy.prototype.getContainer = function (id) {
   return ContainerProxy(this.$subject.getContainer(id));
 };
 
+DockerProxy.prototype.getVolume = function (name) {
+  return PromiseProxy(this.$subject.getVolume(name));
+};
+
 module.exports = DockerProxy;

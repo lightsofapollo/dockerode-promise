@@ -51,17 +51,22 @@ promiseObj(DockerProxy.prototype, wrappedProto);
 
 // sadly we need to wrap run directly as a promise to consolidate both
 // of the resulting arguments.
-DockerProxy.prototype.run = function(image, command, stream) {
+DockerProxy.prototype.run = function() {
   var subject = this.$subject;
+  var args = Array.prototype.slice.call(arguments);
+  while(args.length && args.length < subject.run.length - 1) {
+    args.push(undefined);
+  }
   return new Promise(function(accept, reject) {
-     subject.run(image, command, stream, function(err, result, container) {
-        if (err) return reject(err);
-        accept({
-          result: result,
-          // re-wrap
-          container: ContainerProxy(container)
-        });
-     });
+    args.push(function(err, result, container) {
+      if (err) return reject(err);
+      accept({
+        result: result,
+        // re-wrap
+        container: ContainerProxy(container)
+      })
+    });
+     subject.run(...args);
   });
 };
 
